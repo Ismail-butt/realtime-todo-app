@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import FormInput from '../form-input/FormInput'
 import Button from '../button/Button'
 import { SignUpContainer } from './SignUpForm.styles.js'
+import UserContext from '../../contexts/UserContext'
 
 const SignUpForm = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,8 @@ const SignUpForm = () => {
     confirmPassword: '',
   })
   const { displayName, email, password, confirmPassword } = formData
+
+  const { register } = useContext(UserContext)
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -28,6 +31,7 @@ const SignUpForm = () => {
 
     try {
       // Call Register Api Here and move to Home Page
+      register(displayName, email, password)
 
       setFormData({
         displayName: '',
