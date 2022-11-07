@@ -4,7 +4,7 @@ export const AddTodoContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+  width: 79%;
 
   h2 {
     margin: 10px 0;

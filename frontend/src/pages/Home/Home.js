@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import Sidebar from '../../components/sidebar/Sidebar'
 import AddTodoForm from '../../components/add-todo-form/AddTodoForm'
+import Todos from '../../components/get-todos/Todos'
 import './Home.styles.css'
 
 const Home = () => {
@@ -8,7 +9,8 @@ const Home = () => {
     <div className='homeContainer'>
       <Sidebar />
       <Routes>
-        <Route index element={<AddTodoForm />} />
+        <Route index element={<Todos />} />
+        <Route path='/add-todo' element={<AddTodoForm />} />
       </Routes>
     </div>
   )
