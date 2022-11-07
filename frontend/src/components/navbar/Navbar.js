@@ -1,3 +1,5 @@
+import { useContext } from 'react'
+import UserContext from '../../contexts/UserContext'
 import {
   NavigationContainer,
   LogoContainer,
@@ -6,6 +8,12 @@ import {
 } from './navbar.styles'
 
 const Navbar = () => {
+  const { currentUser, logout } = useContext(UserContext)
+
+  const signOutHandler = async () => {
+    logout()
+  }
+
   return (
     <>
       <NavigationContainer>
@@ -13,7 +21,13 @@ const Navbar = () => {
 
         <NavLinks>
           <NavLink to='/'>Home</NavLink>
-          <NavLink to='/auth'>SIGN IN</NavLink>
+          {currentUser ? (
+            <NavLink as='span' onClick={signOutHandler}>
+              SIGN OUT
+            </NavLink>
+          ) : (
+            <NavLink to='/auth'>SIGN IN</NavLink>
+          )}
         </NavLinks>
       </NavigationContainer>
     </>
