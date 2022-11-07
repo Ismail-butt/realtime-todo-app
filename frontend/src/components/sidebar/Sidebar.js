@@ -1,10 +1,13 @@
+import { useNavigate } from 'react-router-dom'
 import { sidebarData } from './sidebarData'
 import './Sidebar.styles.css'
 
 const Sidebar = () => {
-  const onClickHandler = (link) => {
-    console.log('Clicked', link)
+  const navigate = useNavigate()
+  const onClickHandler = (url) => {
+    console.log('Clicked', url)
     // Navigate to the link
+    navigate(url)
   }
   return (
     <div className='sidebar'>
