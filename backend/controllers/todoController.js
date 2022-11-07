@@ -78,7 +78,7 @@ const updateTodo = asyncHandler(async (req, res) => {
     throw new Error(`The todo with Id ${req.params.id} was not found.`)
   }
 
-  res.send(patient)
+  res.send(todo)
 })
 
 // Exports Here

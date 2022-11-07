@@ -9,6 +9,7 @@ const { notFound, errorHandler } = require('./middleware/errorMiddleware')
 const connectDB = require('./config/db')
 
 const userRoutes = require('./routes/userRoutes')
+const todoRoutes = require('./routes/todoRoutes')
 
 // Connect to database
 connectDB()
@@ -27,6 +28,7 @@ app.use(express.json())
 app.use(cors(corsOptions))
 
 app.use('/api/users', userRoutes)
+app.use('/api/todos', todoRoutes)
 
 app.get('/', (req, res) => {
   res.send('App is running...')
