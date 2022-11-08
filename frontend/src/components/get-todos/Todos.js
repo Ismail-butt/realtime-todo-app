@@ -9,12 +9,7 @@ import {
   TodosList,
 } from './todos.styles.js'
 import axios from '../axios/axios'
-
-const config = {
-  headers: {
-    'Content-Type': 'application/json',
-  },
-}
+import pusher from '../../pusher/pusher'
 
 const Todos = () => {
   const [todos, setTodos] = useState([])
@@ -50,6 +45,15 @@ const Todos = () => {
       setTodos(data)
     }
     getTodos()
+
+    const channel = pusher.subscribe('todos')
+    channel.bind('add-todo', (payload) => {
+      setTodos((prevState) => [...prevState, payload])
+    })
+
+    return () => {
+      pusher.unsubscribe('todos')
+    }
   }, [])
 
   return (

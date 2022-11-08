@@ -2,6 +2,13 @@ import { useState } from 'react'
 import FormInput from '../form-input/FormInput'
 import Button from '../button/Button'
 import { AddTodoContainer, ButtonsContainer } from './AddTodoForm.styles'
+import axios from '../axios/axios'
+
+const config = {
+  headers: {
+    'Content-Type': 'application/json',
+  },
+}
 
 const AddTodoForm = () => {
   const [formData, setFormData] = useState({
@@ -20,7 +27,7 @@ const AddTodoForm = () => {
     e.preventDefault()
 
     try {
-      // Call add To-do Api Here
+      await axios.post('/api/todos', { text: todo }, config)
 
       setFormData({
         todo: '',
