@@ -17,6 +17,7 @@ export const BaseButton = styled.button`
   cursor: pointer;
   display: flex;
   justify-content: center;
+  text-decoration: ${(props) => (props.disabled ? 'line-through' : 'none')};
 
   &:hover {
     background-color: white;

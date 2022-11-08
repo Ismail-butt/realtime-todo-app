@@ -9,8 +9,9 @@ import {
   TodosList,
 } from './todos.styles.js'
 import axios from '../axios/axios'
-import pusher from '../../pusher/pusher'
+import pusherObj from '../../pusher/pusher'
 
+const pusher = pusherObj.getInstance()
 const config = {
   headers: {
     'Content-Type': 'application/json',
@@ -19,10 +20,13 @@ const config = {
 
 const Todos = () => {
   const [todos, setTodos] = useState([])
+  const [btnDisabled, setBtnDisabled] = useState(true)
   const [formData, setFormData] = useState({
-    updateTodo: '',
+    text: '',
+    _id: '',
   })
-  const { updateTodo } = formData
+  const [io, setIO] = useState(null)
+  const { text, _id } = formData
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -35,11 +39,14 @@ const Todos = () => {
     e.preventDefault()
 
     try {
-      // Call Update To-do Api Here
+      const { data } = await axios.put(`/api/todos/${_id}`, { text }, config)
+      console.log('data: ', data)
 
       setFormData({
-        updateTodo: '',
+        text: '',
+        _id: '',
       })
+      setBtnDisabled(true)
     } catch (error) {
       console.log('updateTodo Error: ', error.message)
     }
@@ -47,36 +54,55 @@ const Todos = () => {
 
   const deleteTodo = async (id) => {
     try {
-      console.log('Deleted btn clicked1')
-      const { data } = await axios.delete(`/api/todos/${id}`, config)
-      console.log('data: ', data)
+      await axios.delete(`/api/todos/${id}`, config)
     } catch (error) {
       console.log('Error: ', error.message)
     }
   }
 
+  const updateTodoItem = async (todo) => {
+    setFormData(todo)
+    setBtnDisabled(false)
+  }
+
   useEffect(() => {
-    const getTodos = async () => {
-      const { data } = await axios.get('/api/todos')
-      setTodos(data)
-    }
-    getTodos()
+    if (io) {
+      const getTodos = async () => {
+        const { data } = await axios.get('/api/todos')
+        setTodos(data)
+      }
+      getTodos()
 
-    const channel = pusher.subscribe('todos')
-    channel.bind('add-todo', (payload) => {
-      setTodos((prevState) => [...prevState, payload])
-    })
-
-    channel.bind('delete-todo', (payload) => {
-      console.log('Payload: ', payload)
-      setTodos((prevState) => {
-        console.log('Prev State: ', prevState)
-        return prevState.filter((todo) => todo._id !== payload._id)
+      const channel = pusher.subscribe('todos')
+      channel.bind('add-todo', (payload) => {
+        console.log('add', payload)
+        setTodos((prevState) => [...prevState, payload])
       })
-    })
 
+      channel.bind('delete-todo', (payload) => {
+        setTodos((prevState) => {
+          return prevState.filter((todo) => todo._id !== payload._id)
+        })
+      })
+
+      channel.bind('update-todo', (payload) => {
+        setTodos((prevState) => {
+          return prevState.map((todo) =>
+            todo._id === payload._id ? { ...payload } : todo
+          )
+        })
+      })
+
+      return () => {
+        pusher.unsubscribe('todos')
+      }
+    }
+  }, [io])
+
+  useEffect(() => {
+    if (!io) setIO(pusherObj.getInstance())
     return () => {
-      pusher.unsubscribe('todos')
+      setIO(null)
     }
   }, [])
 
@@ -87,22 +113,28 @@ const Todos = () => {
           <FormInput
             label='update todo!'
             type='updateTodo'
-            id='updateTodo'
-            value={updateTodo}
+            id='text'
+            value={text}
             onChange={onChange}
             required
           />
 
           <ButtonsContainer>
-            <Button type='submit' buttonType='update'>
+            <Button type='submit' buttonType='update' isDisabled={btnDisabled}>
               Update Todo
             </Button>
           </ButtonsContainer>
         </form>
       </UpdateFormContainer>
+
       <TodosList>
         {todos.map((todo) => (
-          <Todo key={todo._id} todo={todo} deleteTodo={deleteTodo} />
+          <Todo
+            key={todo._id}
+            todo={todo}
+            deleteTodo={deleteTodo}
+            updateTodoItem={updateTodoItem}
+          />
         ))}
       </TodosList>
     </TodosContainer>

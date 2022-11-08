@@ -79,7 +79,7 @@ const updateTodo = asyncHandler(async (req, res) => {
     res.status(404)
     throw new Error(`The todo with Id ${req.params.id} was not found.`)
   }
-
+  triggerPusherEvent('todos', 'update-todo', todo)
   res.send(todo)
 })
 
