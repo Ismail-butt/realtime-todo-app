@@ -43,7 +43,9 @@ const AddTodoForm = () => {
         />
 
         <ButtonsContainer>
-          <Button type='submit'>Add Todo</Button>
+          <Button type='submit' buttonType='update'>
+            Add Todo
+          </Button>
         </ButtonsContainer>
       </form>
     </AddTodoContainer>
