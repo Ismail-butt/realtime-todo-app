@@ -2,8 +2,17 @@ import Pusher from 'pusher-js'
 
 Pusher.logToConsole = true
 
-const pusher = new Pusher('a87015806fe65ab813b2', {
-  cluster: 'ap2',
-})
+class PusherInstance {
+  pusher
+  constructor() {
+    this.pusher = new Pusher('a87015806fe65ab813b2', {
+      cluster: 'ap2',
+    })
+  }
 
-export default pusher
+  getInstance() {
+    return this.pusher
+  }
+}
+
+export default new PusherInstance()
