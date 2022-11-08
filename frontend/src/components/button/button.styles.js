@@ -58,8 +58,11 @@ export const UpdateButton = styled(BaseButton)`
     'Lucida Sans', Arial, sans-serif;
 
   &:hover {
-    background-color: #34495e;
+    /* background-color: #34495e; 
     color: white;
-    border: 1px solid black;
+    border: 1px solid black; */
+    background-color: black;
+    color: white;
+    border: none;
   }
 `
