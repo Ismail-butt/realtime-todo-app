@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler')
 const { ToDo, validate } = require('../models/todoModel')
+const { pusher, triggerPusherEvent } = require('../pusher/pusher')
 
 // @desc Get all todos
 // @route GET /api/todos
@@ -50,6 +51,7 @@ const createToDo = asyncHandler(async (req, res) => {
   })
 
   await newTodo.save()
+  triggerPusherEvent('todos', 'add-todo', newTodo) // Calling add-todo Event on todos channel here
   res.status(201).send(newTodo)
 })
 
