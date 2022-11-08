@@ -8,20 +8,16 @@ import {
   ButtonsContainer,
   TodosList,
 } from './todos.styles.js'
-// import axios from '../axios/axios'
+import axios from '../axios/axios'
 
-// const config = {
-//   headers: {
-//     'Content-Type': 'application/json',
-//   },
-// }
+const config = {
+  headers: {
+    'Content-Type': 'application/json',
+  },
+}
 
 const Todos = () => {
-  const [todos] = useState([
-    { text: 'Hospital Appointment', id: '1' },
-    { text: 'Airport Flight Today', id: '2' },
-  ])
-
+  const [todos, setTodos] = useState([])
   const [formData, setFormData] = useState({
     updateTodo: '',
   })
@@ -38,7 +34,7 @@ const Todos = () => {
     e.preventDefault()
 
     try {
-      // Call add To-do Api Here
+      // Call Update To-do Api Here
 
       setFormData({
         updateTodo: '',
@@ -50,11 +46,8 @@ const Todos = () => {
 
   useEffect(() => {
     const getTodos = async () => {
-      //   const { data } = await axios.get('/api/todos')
-      //   console.log('data: ', data)
-      console.log('Make an Api Call here')
-
-      //   setTodos(data)
+      const { data } = await axios.get('/api/todos')
+      setTodos(data)
     }
     getTodos()
   }, [])
