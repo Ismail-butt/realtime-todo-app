@@ -11,6 +11,12 @@ import {
 import axios from '../axios/axios'
 import pusher from '../../pusher/pusher'
 
+const config = {
+  headers: {
+    'Content-Type': 'application/json',
+  },
+}
+
 const Todos = () => {
   const [todos, setTodos] = useState([])
   const [formData, setFormData] = useState({
@@ -39,6 +45,16 @@ const Todos = () => {
     }
   }
 
+  const deleteTodo = async (id) => {
+    try {
+      console.log('Deleted btn clicked1')
+      const { data } = await axios.delete(`/api/todos/${id}`, config)
+      console.log('data: ', data)
+    } catch (error) {
+      console.log('Error: ', error.message)
+    }
+  }
+
   useEffect(() => {
     const getTodos = async () => {
       const { data } = await axios.get('/api/todos')
@@ -49,6 +65,14 @@ const Todos = () => {
     const channel = pusher.subscribe('todos')
     channel.bind('add-todo', (payload) => {
       setTodos((prevState) => [...prevState, payload])
+    })
+
+    channel.bind('delete-todo', (payload) => {
+      console.log('Payload: ', payload)
+      setTodos((prevState) => {
+        console.log('Prev State: ', prevState)
+        return prevState.filter((todo) => todo._id !== payload._id)
+      })
     })
 
     return () => {
@@ -77,8 +101,8 @@ const Todos = () => {
         </form>
       </UpdateFormContainer>
       <TodosList>
-        {todos.map((todo, index) => (
-          <Todo key={index} todo={todo} />
+        {todos.map((todo) => (
+          <Todo key={todo._id} todo={todo} deleteTodo={deleteTodo} />
         ))}
       </TodosList>
     </TodosContainer>

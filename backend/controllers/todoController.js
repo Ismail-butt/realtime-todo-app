@@ -32,7 +32,7 @@ const deleteToDo = asyncHandler(async (req, res) => {
     res.status(404)
     throw new Error(`The todo with Id ${req.params.id} was not found.`)
   }
-
+  triggerPusherEvent('todos', 'delete-todo', todo)
   res.send(todo)
 })
 
