@@ -17,7 +17,7 @@ export const BaseButton = styled.button`
   cursor: pointer;
   display: flex;
   justify-content: center;
-  text-decoration: ${(props) => (props.disabled ? 'line-through' : 'none')};
+  background-color: ${(props) => (props.disabled ? 'grey' : '#34495e')};
 
   &:hover {
     background-color: white;
@@ -49,7 +49,6 @@ export const InvertedButton = styled(BaseButton)`
 `
 
 export const UpdateButton = styled(BaseButton)`
-  background-color: #34495e;
   color: white;
   border-radius: 5px;
   height: 45px;
@@ -59,9 +58,6 @@ export const UpdateButton = styled(BaseButton)`
     'Lucida Sans', Arial, sans-serif;
 
   &:hover {
-    /* background-color: #34495e; 
-    color: white;
-    border: 1px solid black; */
     background-color: black;
     color: white;
     border: none;
