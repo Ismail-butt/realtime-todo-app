@@ -1,0 +1,29 @@
+.task {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 400px;
+    background-color: #34495e;
+    padding: 15px;
+    margin: 5px;
+    overflow-x: hidden;
+    border-radius: 6px;
+    color: #FFFFFF;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.text {
+    flex: 80%;
+}
+
+.icons {
+    flex: 20%;
+    display: flex;
+    flex-direction: row;
+}
+
+.icon {
+    cursor: pointer;
+    float: right;
+    margin-right: 20px;
+}
